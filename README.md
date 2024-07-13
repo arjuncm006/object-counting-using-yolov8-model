@@ -1,22 +1,5 @@
 
-# Box Detection and Counting using OpenCV
-C:/Users/harshini/OneDrive/Documents/GitHub/Counting-of-Objects-in-an-image/runs/detect/yolov8n_custom2/weights/best.pt
-## Table of Contents
-1. [Introduction](#introduction)
-2. [Requirements](#requirements)
-3. [Software and Tools](#software-and-tools)
-4. [Dataset Preparation](#dataset-preparation)
-5. [Configuration File](#configuration-file)
-6. [Model Setup](#model-setup)
-7. [Training the Model](#training-the-model)
-    - [Rename Trained Weights](#Rename-trained-weights)
-    - [Model Inference](#model-inference)
-7. [Explanation Code](#explanation-code)
-    - [Python Code for Box Detection](#python-code-for-box-detection)
-8. [Output Explanation](#output-explanation)
-6. [Applications](#applications)
-7. [Future Scope](#future-scope)
-8. [Summary](#summary)
+
 
 
 ## Introduction
@@ -96,84 +79,6 @@ yolo task=detect mode=predict model=yolov8m_custom.pt show=True conf=0.5 source=
 ### Python Code for Box Detection
 Use the following Python code to import the model yolov8m_custom.pt and detect boxes in an image, displaying the number of boxes detected:
 
-```python
-import cv2
-import numpy as np
-
-# Load the image
-image = cv2.imread('box3.jpg')
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-# Apply Gaussian Blur to reduce noise
-blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-
-# Apply thresholding or edge detection to highlight the boxes
-edges = cv2.Canny(blurred, 50, 150)
-
-# Find contours in the edged image and retrieve the hierarchy
-contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-# Initialize a list to store valid contours (boxes)
-valid_contours = []
-
-# Define minimum and maximum threshold values for box size
-min_area = 1000  # Adjust this value based on the minimum area of your boxes
-max_area = 5000  # Adjust this value based on the maximum area of your boxes
-
-# Iterate through all detected contours
-for i, contour in enumerate(contours):
-    # Get the bounding box coordinates
-    x, y, w, h = cv2.boundingRect(contour)
-    
-    # Calculate the area of the contour
-    area = cv2.contourArea(contour)
-    
-    # Calculate the aspect ratio
-    aspect_ratio = float(w) / h
-    
-    # Filter contours based on area, aspect ratio, and hierarchy
-    if area > min_area and area < max_area and aspect_ratio > 0.5 and aspect_ratio < 2.0:
-        # Check if contour has no parent (top-level contour)
-        if hierarchy[0][i][3] == -1:
-            valid_contours.append(contour)
-            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-# Count the number of detected valid contours (boxes)
-num_boxes = len(valid_contours)
-
-# Display the result
-cv2.putText(image, f'Number of Boxes: {num_boxes}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
-cv2.imshow('Boxes Detected', image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
-# Print the number of boxes detected
-print(f'Number of boxes detected: {num_boxes}')
-```
-
-## Output Explanation
-After running the inference code, the output will be an image with detected boxes highlighted by green rectangles. The number of detected boxes will be displayed both on the image and printed in the console. The contours detected by the algorithm are filtered based on their area, aspect ratio, and hierarchy to ensure only valid boxes are counted.
-
-## Applications
-The techniques and processes described in this project have several practical applications, including:
-
-- **Automated Quality Control**: Detecting defects or missing components in manufacturing.
-- **Logistics and Inventory Management**: Identifying and counting items in warehouses.
-- **Surveillance and Security**: Monitoring and detecting objects in security footage.
-- **Retail**: Managing stock and detecting product placement on shelves.
-
-## Future Scope
-Future enhancements and extensions to this project could include:
-
-- **Multi-Class Detection**: Expanding the model to detect and classify multiple types of objects.
-- **Real-Time Detection**: Implementing real-time detection using video feeds.
-- **Improved Accuracy**: Fine-tuning the model and using more sophisticated data augmentation techniques to improve detection accuracy.
-- **Deployment**: Creating a web or mobile application to deploy the model for practical use.
-
-
-## Summary
-
-This project demonstrates the complete pipeline of annotating a dataset, training a YOLOv8 model, and using the trained model to detect objects in images. By following the steps outlined, one can develop a custom object detection model tailored to specific needs, with various practical applications across different industries. The future scope suggests further improvements and extensions to enhance the model's capabilities and deployment options.
 
 
 MY CODE
