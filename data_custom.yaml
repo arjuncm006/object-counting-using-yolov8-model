@@ -1,0 +1,5 @@
+train: C:/Users/harshini/OneDrive/Desktop/pen
+val: C:/Users/harshini/OneDrive/Desktop/pen
+nc: 1
+names: ["pen"]
+  
